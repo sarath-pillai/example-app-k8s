@@ -35,7 +35,7 @@ Similarly just a docker build can be achieved using the below.
 make build
 ```
 ## How does the deployment work?
-At its current form, the docker build generates a docker image in the form of REPO_NAME:TAG_NAME (tag name is the git commit has). This image is then published to a docker registry(dockerhub is used as registry in this example). 
+At its current form, the docker build generates a docker image in the form of REPO_NAME:TAG_NAME (tag name is the git commit hash). This image is then published to a docker registry(dockerhub is used as registry in this example). 
 
 The make commands assumes that you have proper authentication to kubernetes cluster & Dockerhub registry.
 
@@ -55,3 +55,7 @@ Basically deploying an application onto kubernetes requires multiple kubernetes 
 ## What does the k8s directory do?
 The k8s directory does the exact same thing that `helm` directory does. But `k8s` is more of raw kubernetes objects. The issue with using raw kuberenetes objects is the fact that overriding values like image tag etc during deployment is tricky.  One technique that can be used to do templating for raw kubernetes objects is `Kustomize`. https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/. 
 
+## Any Other Methods?
+
+- Rather than using a make file to test, build and deploy, these things can be achieved using a pipeline with different stages. For example, we can have a Jenkinsfile in this repository, that can contain stages for test, build and publish etc.  Each commit can be built and tested, depending on the pipeline stages. Jenkins can easily watch commits and pushes to the required branches to auto deploy (Similary, github workflows can also be used.)
+- Apart from the methods demonstrated in this repository, we can also use terraform kubernetes provider (https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs), to create the kubernetes objects. Basically a terraform module can be created that creates an applicaion inside the cluster (the module will create resources like deployment objects, ingress, and services etc.)
