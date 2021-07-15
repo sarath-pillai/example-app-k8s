@@ -18,6 +18,6 @@ publish:
 deploy:
 	echo "Deploying Using Helm"
 	$(eval PKG=$(shell sh -c "helm package --app-version=$(IMAGE_TAG) helm | awk '{print $8}'"))
-	helm upgrade --install $(APP_NAME)  --set image.tag=$(IMAGE_TAG) tree-0.1.0.tgz
+	helm upgrade --install $(APP_NAME)  --set image.tag=$(IMAGE_TAG) --set image.repository=$(REPO_NAME) tree-0.1.0.tgz
 
 all: test build publish deploy 
