@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tree
+  labels:
+    app: tree
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tree
+  template:
+    metadata:
+      labels:
+        app: tree
+    spec:
+      containers:
+      - name: tree
+        image: sarathpillai88/tree:1.0
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        livenessProbe:
+          httpGet:
+            path: /tree
+            port: 5000
