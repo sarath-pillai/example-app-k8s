@@ -1,0 +1,21 @@
+name: Release Tag
+
+on:
+  release:
+    types: [published, created, edited]
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Get the tag
+        id: get_version
+        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+      - name: Do docker build
+        run: make build IMAGE_TAG=${{ steps.get_version.outputs.VERSION }}
